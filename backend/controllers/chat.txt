@@ -1,3 +1,20 @@
+yooh  chat  gat an  issue  with  the delete  user  i test  it  uaing  this  api 
+http://localhost:5000/api/users/687b97727228bedea8691a7c
+and  this  is  my result
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Error</title>
+  </head>
+  <body>
+    <pre>Cannot DELETE /api/users/687b97727228bedea8691a7c</pre>
+  </body>
+</html>
+
+
+
+this  is  my code  
 import asyncHandler from "../middlewares/asyncHandler.js";
 import User from "../models/userModel.js";
 
@@ -115,7 +132,7 @@ const updateCurrentUserProfile = asyncHandler(async (req, res) => {
 });
 
 const deleteUserById = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id);
+  const user = await User.findById(req.param.id);
 
   if (user) {
     if (user.isAdmin) {
@@ -123,42 +140,13 @@ const deleteUserById = asyncHandler(async (req, res) => {
       throw new Error("cannot  delete  Admin");
     }
     await User.deleteOne({ _id: user._id });
-    res.status(200).json({ message: "user  deleted  " });
   } else {
     res.status(404);
     throw new Error("user not  found");
   }
 });
-const getAllUsersById = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id).select("-password");
-  if (user) {
-    res.json(user);
-  } else {
-    res.status(404);
-    throw new Error("user not  found");
-  }
-});
-const updateAllUsersById = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id).select("-password");
-  if (user) {
-    user.userName = req.body.userName || user.userName;
-    user.email = req.body.email || user.email;
-    user.isAdmin = Boolean(req.body.isAdmin);
-    const updatedUser = await user.save();
-    res.json({
-      _id: updatedUser._id,
-      userName: updatedUser.userName,
-      email: updatedUser.email,
-      password: updatedUser.password,
-      isAdmin: updatedUser.isAdmin,
-    });
-  } else {
-    res.status(404);
-    throw new Error("user not  found");
-  }
-});
+
 export {
-  updateAllUsersById,
   deleteUserById,
   createUser,
   updateCurrentUserProfile,
@@ -166,5 +154,34 @@ export {
   logOut,
   getAllUsers,
   getCurrentUserProfile,
-  getAllUsersById,
 };
+   '
+   this  is  my  route 
+   import express from "express";
+import { authenticate, authorizeAdmin } from "../middlewares/authMiddleware.js";
+import {
+  createUser,
+  loginUser,
+  logOut,
+  getAllUsers,
+  getCurrentUserProfile,
+  updateCurrentUserProfile,
+  deleteUserById,
+} from "../controllers/userController.js";
+
+const router = express.Router();
+router
+  .route("/")
+  .post(createUser)
+  .get(authenticate, authorizeAdmin, getAllUsers);
+router.post("/auth", loginUser);
+router.post("/logout", logOut);
+router
+  .route("/profile")
+  .get(authenticate, getCurrentUserProfile)
+  .put(authenticate, updateCurrentUserProfile);
+
+//admin routes
+router.route("/_id").delete(authenticate, authorizeAdmin, deleteUserById);
+
+export default router;

@@ -1,3 +1,6 @@
+import { outlet } from "react-router-dom";
+import Navigation from "./pages/Auth/Navigation";
+
 const App = () => {
   return (
     <>

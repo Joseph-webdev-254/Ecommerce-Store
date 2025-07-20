@@ -6,7 +6,7 @@ const authenticate = asyncHandler(async (req, res, next) => {
   let token;
 
   //read jwt cokkies
-  token = req.cooskie.jwt;
+  token = req.cookies.jwt;
   if (token) {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
