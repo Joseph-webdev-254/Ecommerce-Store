@@ -1,6 +1,6 @@
 #navigation-container {
   width: 4%;
-  transition: width 0.3 ease-in-out;
+  transition: width 0.3s ease-in-out;
   overflow: hidden;
 }
 
@@ -8,13 +8,11 @@
   width: 15%;
 }
 
-/* innitatially hidden nav  items */
-
 .nav-item-name {
   display: none;
-  transition: opacity 0.2s ease-in-out;
 }
-#navigation-container:hover {
+
+#navigation-container:hover .nav-item-name {
   display: block;
   opacity: 1;
 }
