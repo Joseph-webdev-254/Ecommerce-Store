@@ -11,7 +11,10 @@ import { FaHeart } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 
 import { useSelector, useDispatch } from "react-redux";
-import { useLoginMutation } from "../../App/Api/userApiSlice";
+import {
+  useLoginMutation,
+  useLogOutUserMutation,
+} from "../../App/Api/userApiSlice";
 import { logOut } from "../../App/features/Auth/authSlice";
 
 const Navigation = () => {
@@ -21,7 +24,7 @@ const Navigation = () => {
   const [dropdownOpen, setdropdownOpen] = useState();
 
   const toggleDropdown = () => {
-    setShowSideBar(!dropdownOpen);
+    setdropdownOpen(!dropdownOpen);
   };
 
   const toggleSideBar = () => {
@@ -35,7 +38,7 @@ const Navigation = () => {
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
-  const [logoutApiCall] = useLoginMutation();
+  const [logoutApiCall] = useLogOutUserMutation();
 
   const logoutHandler = async () => {
     try {
@@ -105,31 +108,124 @@ const Navigation = () => {
             ) : (
               <></>
             )}
+
+            {userInfo && (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className={`h-4 w-4 ml-1 ${
+                  dropdownOpen ? "transform rotate-180" : ""
+                }`}
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="white"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            )}
           </button>
+
+          {dropdownOpen && userInfo && (
+            <ul
+              className={`absolute right-0 mt-2 mr-14 space-y-2  bg-white text-gray-600  ${
+                !userInfo.isAdmin ? " -top-20" : "-top-80"
+              }     `}
+            >
+              {userInfo.isAdmin && (
+                <>
+                  <li>
+                    <Link
+                      to={"/admin/dashboard"}
+                      className="block px-5 py-2 hover:bg-gray-100"
+                    >
+                      Dashboard
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to={"/admin/productList"}
+                      className="block px-5 py-2 hover:bg-gray-100"
+                    >
+                      Products
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to={"/admin/categoryList"}
+                      className="block px-5 py-2 hover:bg-gray-100"
+                    >
+                      Category
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to={"/admin/orderlist"}
+                      className="block px-5 py-2 hover:bg-gray-100"
+                    >
+                      Order
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to={"/admin/userlist"}
+                      className="block px-5 py-2 hover:bg-gray-100"
+                    >
+                      Users
+                    </Link>
+                  </li>{" "}
+                </>
+              )}
+
+              <li>
+                <Link
+                  to={"/admin/profile"}
+                  className="block px-5 py-2 hover:bg-gray-100"
+                >
+                  Profile
+                </Link>
+              </li>
+              <li>
+                <button
+                  to={"/admin/logout"}
+                  onClick={logoutHandler}
+                  className="block px-5 py-2 hover:bg-gray-100"
+                >
+                  Logout
+                </button>
+              </li>
+            </ul>
+          )}
         </div>
 
         {/* Bottom Nav Links */}
-        <div className="flex flex-col space-y-4">
-          <Link
-            to="/register"
-            className="flex items-center transition-transform transform hover:translate-x-2"
-          >
-            <AiOutlineUserAdd size={26} className="mr-2" />
-            <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              REGISTER
-            </span>
-          </Link>
 
-          <Link
-            to="/login"
-            className="flex items-center transition-transform transform hover:translate-x-2"
-          >
-            <AiOutlineLogin size={26} className="mr-2" />
-            <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              LOGIN
-            </span>{" "}
-          </Link>
-        </div>
+        {!userInfo && (
+          <div className="flex flex-col space-y-4">
+            <Link
+              to="/register"
+              className="flex items-center transition-transform transform hover:translate-x-2"
+            >
+              <AiOutlineUserAdd size={26} className="mr-2" />
+              <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                REGISTER
+              </span>
+            </Link>
+
+            <Link
+              to="/login"
+              className="flex items-center transition-transform transform hover:translate-x-2"
+            >
+              <AiOutlineLogin size={26} className="mr-2" />
+              <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                LOGIN
+              </span>{" "}
+            </Link>
+          </div>
+        )}
       </div>
     </>
   );

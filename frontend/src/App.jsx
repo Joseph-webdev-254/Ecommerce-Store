@@ -8,6 +8,9 @@ const App = () => {
       <ToastContainer />
 
       <Navigation />
+
+      <Outlet />
+
       <main className="py-3"></main>
     </div>
   );
