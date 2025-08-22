@@ -76,7 +76,7 @@ const Login = () => {
           </form>
 
           <div className="mt-4">
-            <h2 className="text-white">
+            <h2 className="text-gray-700">
               New customer ?{" "}
               <Link
                 to={redirect ? `/register?redirect=${redirect}` : "/register"}
