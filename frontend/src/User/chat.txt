@@ -1,1 +1,36 @@
 why  does  the  route  add  an  admin  part  to  the  url  
+
+
+and  here  import { useEffect, useState } from "react";
+import { FaTrash, FaEdit, FaCheck, FaTimes } from "react-icons/fa";
+import Loader from "../../../Components/Loader";
+import { toast } from "react-toastify";
+import { useLoginMutation } from "../../App/Api/userApiSlice";
+import {
+  useGetUsersQuery,
+  useDeleteUserMutation,
+  useUpdateUserMutation,
+  useGetUserDetailsQuery,
+} from "../../../App/Api/userApiSlice";
+
+const UserList = () => {
+  const { data: users, refetch, isLoading, error } = useGetUsersQuery();
+  const [deleteUser] = useDeleteUserMutation();
+  const [updateUser] = useUpdateUserMutation();
+
+  const [editableUserId, seteditableUserId] = useState(null);
+  const [editableUserName, seteditableUserName] = useState("");
+  const [editableUserEmail, seteditableUserEmail] = useState("");
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
+
+  return <div></div>;
+};
+
+export default UserList;
+   
+
+   what  does  the refetcn  do  here 
+   
